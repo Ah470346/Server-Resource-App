@@ -1,0 +1,108 @@
+.modal-edit-server {
+    & .ant-modal-content{
+        padding-bottom: 20px;
+    }
+    & .ant-modal-body {
+        padding-top: 20px !important;
+    }
+    & .wrap-modal-content {
+        @include flexBox(row);
+        .filed {
+            p {
+                display: inline-block;
+                width: 170px;
+            }
+            input {
+                width: 220px;
+            }
+        }
+        .left {
+            margin-left: 20px;
+
+            & > p {
+                color: red;
+                font-style: italic;
+                font-size: 0.9em;
+                margin-top: 20px;
+            }
+        }
+
+        .right {
+            margin-left: 70px;
+            .filed {
+                p {
+                    display: inline-block;
+                    width: 70px;
+                }
+                .ant-select {
+                    width: 100px;
+                }
+                input {
+                    width: 100px;
+                }
+            }
+        }
+    }
+    .save{
+        width: 100px;
+        height: 40px;
+        border: none;
+        border-radius: 5px;
+        color: black;
+        opacity: 1;
+        margin-right: 50px;
+        font-size: 1.1em;
+        background-color: $backgroundButtonColor;
+    }
+    .save:hover{
+        opacity: 0.7;
+    }
+}
+.model-delete-server {
+    .ant-modal-content{
+        border-radius: 0px 0px 0px 0px !important;
+
+        .ant-modal-body {
+            display: none
+        }
+        .ant-modal-header {
+            @include flexBox(row,center,center);
+        }
+
+        .ant-modal-footer{
+            padding: 20px 16px 40px 16px;
+            @include flexBox(row,center,center);
+
+            button {
+                width: 100px;
+                height: 40px;
+                font-weight: 600;
+            }
+            button:first-child{
+                margin-right: 30px;
+                color: $backgroundGreen;
+                border-color: $backgroundGreen;
+            }
+            button:first-child:hover{
+                opacity: 0.7;
+            }
+        }
+    }
+}
+
+.modal-edit-server.model {
+    .right {
+        .filed {
+            p {
+                display: inline-block;
+                width: 100px;
+            }
+            .ant-select {
+                width: 140px;
+            }
+            input {
+                width: 100px;
+            }
+        }
+    }
+}

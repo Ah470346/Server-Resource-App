@@ -1,0 +1,122 @@
+.wrap-home{
+    height: 100vh;
+    width: 100vw;
+    padding: 10px;
+    background-color: $backgroundHomeColor;
+    & .header {
+        @include flexBox(row,space-between,center);
+        height: 10%;
+        width: 100%;
+        padding: 0px 20px 0px 40px;
+        & > img {
+            width: 100px;
+            height: 50px;
+        }
+
+        & > div {
+            @include flexBox(row,flex-start,center);
+            & img {
+                width: 25px;
+                height: 25px;
+                margin-right: 5px;
+            }
+
+            p {
+                display: inline-block;
+                font-size: 1.2em;
+                font-weight: 600;
+            }
+        }
+    }
+
+    & .body {
+        height: 90%;
+        padding: 10px 0px 10px 0px;
+
+        & .sidebar {
+            width: 100%;
+            border-radius: 15px;
+            padding: 30px 0 0 25px;
+            background-color: rgba(74,75,76,255);
+
+            & .tabs {
+                position: relative;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                list-style: none;
+                
+                .tab {
+                    @include flexBox(row,flex-start,center);
+                    padding: 10px 0px 10px 0px;
+                    cursor: pointer;
+                    svg{
+                        width: 25px;
+                        height: 25px;
+                        stroke: white;
+                        margin-right: 15px;
+                    }
+
+                    p{
+                        font-size: 1.15em;
+                        font-weight: 600;
+                        color: white;
+                    }
+                }
+
+                .tab.model {
+                    svg {
+                        fill: white;
+                    }
+                }
+                .active {
+                    svg{
+                        stroke: $backgroundLinkColor;
+                    }
+                    p{
+                        color: $backgroundLinkColor;
+                    }
+                } 
+                .tab.model.active {
+                    svg {
+                        fill: $backgroundLinkColor;
+                    }
+                }
+
+                & span {
+                    position: absolute;
+                    right: 0;
+                    top:0;
+                    width: 5px;
+                    height: 100%;
+                    background-color: $backgroundLinkColor;
+                    transition: all 0.3s ease;
+                }
+                .tab.home.active ~ span {
+                    transform: translateY(-33.3333%) scaleY(0.3333);
+                }
+                .tab.server.active ~ span {
+                    transform: translateY(0) scaleY(0.3333);
+                }
+                .tab.model.active ~ span {
+                    transform: translateY(33.3333%) scaleY(0.3333);
+                }
+                .tab:hover{
+                    svg{stroke: $backgroundLinkColor;}
+                    p {color: $backgroundLinkColor;}
+                }
+                .tab.model:hover{
+                    svg{fill: $backgroundLinkColor;}
+                    p {color: $backgroundLinkColor;}
+                }
+            }
+        }
+
+        & .content {
+            padding: 15px 20px 0 20px;
+        }
+    }
+    @import './Home/Home';
+    @import './ServerConfig/Server';
+    @import './ModelConfig//Model';
+}
