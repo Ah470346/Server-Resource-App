@@ -5,12 +5,16 @@ import {ReactComponent as ServerIcon} from '../../Assets/server.svg';
 import {ReactComponent as LayerIcon} from '../../Assets/layers.svg';
 import Logout from '../../Assets/logout.svg';
 import { Row, Col } from 'antd';
+import {useDispatch} from "react-redux";
 import Home from './Home/Home';
 import Server from './ServerConfig/Server';
 import Model from './ModelConfig/Model';
+import {addPermission} from '../../Stores/permission/slice';
 
 function Main(props) {
     const [homePage,setHomPage] = useState("Home");
+    const dispatch = useDispatch();
+    const onPermission = (permission) => dispatch(addPermission(permission)); 
     const onChangePageHome = () =>{
         setHomPage("Home");
         const tabHome = document.querySelector(".tab.home");
@@ -123,7 +127,10 @@ function Main(props) {
         <div className="wrap-home">
             <div className="header">
                 <img src={VBPO} alt="" />
-                <div className="logout">
+                <div onClick={()=>{
+                    localStorage.setItem("permission","login");
+                    onPermission("login");
+                }} className="logout">
                     <img src={Logout} alt="" />
                     <p>Logout</p>
                 </div>

@@ -62,7 +62,8 @@ function Model(props) {
             key:"memory",
             // width:130,
             sorter: {
-                compare: (a, b) => a.number - b.number,
+                compare: (a, b) => parseInt(a.memory.slice(0,a.memory.indexOf("G")-1)) 
+                - parseInt(b.memory.slice(0,b.memory.indexOf("G")-1)),
                 multiple: 2,
             }
         },
@@ -73,24 +74,16 @@ function Model(props) {
             // width:160
         },
         {
-            title: 'Main_Server',
+            title: 'Main Server',
             dataIndex: 'main',
             key:"main",
             // width:130,
-            sorter: {
-                compare: (a, b) => a.number - b.number,
-                multiple: 2,
-            }
         },
         {
-            title: 'Backup_Server',
+            title: 'Backup Server',
             dataIndex: 'backup',
             key:"backup",
             // width:100,
-            sorter: {
-                compare: (a, b) => a.number - b.number,
-                multiple: 2,
-            }  
         },
         {
             title: 'Status',
@@ -98,7 +91,7 @@ function Model(props) {
             key:"status",
             // width:100,
             sorter: {
-                compare: (a, b) => a.number - b.number,
+                compare: (a, b) => a.status - b.status,
                 multiple: 2,
             }
         },
@@ -107,20 +100,12 @@ function Model(props) {
             dataIndex: 'start',
             key:"start",
             // width:100,
-            sorter: {
-                compare: (a, b) => a.number - b.number,
-                multiple: 2,
-            }
         },
         {
             title: 'Time End',
             dataIndex: 'end',
             key:"end",
             // width:100,
-            sorter: {
-                compare: (a, b) => a.number - b.number,
-                multiple: 2,
-            }
         },
         {
             title: '',

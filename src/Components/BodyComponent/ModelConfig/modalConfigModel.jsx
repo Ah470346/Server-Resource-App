@@ -75,7 +75,9 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 Status:select.status === "" ? parseInt(fillData.Status) : parseInt(select.status),
                 Server_Run:select.server === "" ? fillData.Server_Run : select.server,
                 time_start:time.start === "" ? fillData.time_start : time.start,
-                time_stop: time.end === "" ? fillData.time_stop : time.end
+                time_stop: time.end === "" ? fillData.time_stop : time.end,
+                time_run: fillData.time_run,
+                number_run:fillData.number_run
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "edit" });
                 setTimeout(() => {
@@ -91,6 +93,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 }, 1000);
             })
         } else if(check === true && showModal.action ==="new"){
+            const date = new Date();
             addNewModel({
                 name: name.value,
                 GB_Model:Number(memory.value),
@@ -101,7 +104,9 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 Status:select.status === "" ? 0 : parseInt(select.status),
                 Server_Run: select.server,
                 time_start:time.start === "" ? "00:00:00" : time.start,
-                time_stop: time.end === "" ? "00:00:00" : time.end
+                time_stop: time.end === "" ? "00:00:00" : time.end,
+                time_run: date.toUTCString(),
+                number_run:0
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "new" });
                 setTimeout(() => {

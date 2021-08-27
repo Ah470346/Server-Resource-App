@@ -37,7 +37,7 @@ function Server(props) {
             title: 'Number',
             dataIndex: 'number',
             key:"number",
-            // width:110,
+            width:"10%",
             sorter: {
                 compare: (a, b) => a.number - b.number,
                 multiple: 3,
@@ -52,9 +52,10 @@ function Server(props) {
             title: 'Memory',
             dataIndex: 'memory',
             key:"memory",
-            // width:130,
+            width:"12%",
             sorter: {
-                compare: (a, b) => a.number - b.number,
+                compare:(a, b) => parseInt(a.memory.slice(0,a.memory.indexOf("G")-1)) 
+                - parseInt(b.memory.slice(0,b.memory.indexOf("G")-1)),
                 multiple: 2,
             }
         },
@@ -62,15 +63,16 @@ function Server(props) {
             title: 'Path',
             dataIndex: 'path',
             key:"path",
-            // width:160
+            width:"12%"
         },
         {
             title: 'Usage',
             dataIndex: 'usage',
             key:"usage",
-            // width:130,
+            width:"12%",
             sorter: {
-                compare: (a, b) => a.number - b.number,
+                compare: (a, b) => parseInt(a.usage.slice(0,a.usage.indexOf("G")-1)) 
+                - parseInt(b.usage.slice(0,b.usage.indexOf("G")-1)),
                 multiple: 2,
             }
         },
@@ -78,9 +80,9 @@ function Server(props) {
             title: 'Status',
             dataIndex: 'status',
             key:"status",
-            // width:100,
+            width:"10%",
             sorter: {
-                compare: (a, b) => a.number - b.number,
+                compare: (a, b) => a.status - b.status,
                 multiple: 2,
             }  
         },
@@ -88,9 +90,9 @@ function Server(props) {
             title: 'Device',
             dataIndex: 'device',
             key:"device",
-            // width:100,
+            width:"10%",
             sorter: {
-                compare: (a, b) => a.number - b.number,
+                compare: (a, b) => a.device - b.device,
                 multiple: 2,
             }
         },
@@ -98,7 +100,7 @@ function Server(props) {
             title: '',
             dataIndex: 'action',
             key:"action",
-            // width:80,
+            width:"10%",
         },
     ]
 

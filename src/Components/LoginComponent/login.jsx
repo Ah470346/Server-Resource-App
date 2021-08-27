@@ -58,7 +58,7 @@ function Login(props) {
                             <span></span>
                         </div>
                         <div className="input password">
-                            <input type="type" name="password" id="password" required/>
+                            <input type="password" name="password" id="password" required/>
                             <label htmlFor="password">
                                 <p>PASSWORD</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" 
