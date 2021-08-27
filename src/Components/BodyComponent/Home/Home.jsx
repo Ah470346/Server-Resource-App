@@ -67,7 +67,7 @@ function Home({columns,columnsDetail}) {
             memory:`${i.GB} GB`,
             device: i.Device,
             file: fileRun.length !==0 
-            && <div className="file">{fileRun[index].total !==0 && `${fileRun[index].run}/${fileRun[index].total}`}
+            && status.status !==0 && <div className="file">{fileRun[index].total !==0 && `${fileRun[index].run}/${fileRun[index].total}`}
                 {fileRun[index].status === "error" && <Error style={{with:"18px",height:"18px"}}/>}
                 {fileRun[index].status === "warning" && <Warning style={{with:"18px",height:"18px"}}/>}
                 {fileRun[index].status === "" && fileRun[index].total !==0 && <Success style={{with:"18px",height:"18px"}}/>}</div>
