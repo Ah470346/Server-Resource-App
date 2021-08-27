@@ -9,7 +9,7 @@ import {ReactComponent as Warning} from '../../../Assets/warning.svg';
 import {ReactComponent as Error} from '../../../Assets/error.svg';
 import {Table,Modal} from 'antd';
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "http://192.168.1.134:8080";
 
 function Home({columns,columnsDetail}) {
     const dispatch = useDispatch();
@@ -67,10 +67,10 @@ function Home({columns,columnsDetail}) {
             memory:`${i.GB} GB`,
             device: i.Device,
             file: fileRun.length !==0 
-            && <div className="file">{fileRun[index.total] !==0 && `${fileRun[index].run}/${fileRun[index].total}`}
+            && <div className="file">{fileRun[index].total !==0 && `${fileRun[index].run}/${fileRun[index].total}`}
                 {fileRun[index].status === "error" && <Error style={{with:"18px",height:"18px"}}/>}
                 {fileRun[index].status === "warning" && <Warning style={{with:"18px",height:"18px"}}/>}
-                {fileRun[index].status === "" && fileRun[index.total] !==0 && <Success style={{with:"18px",height:"18px"}}/>}</div>
+                {fileRun[index].status === "" && fileRun[index].total !==0 && <Success style={{with:"18px",height:"18px"}}/>}</div>
         }
     });
     const color = (status)=>{
