@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import {Modal, Input,Select,message,TimePicker} from 'antd';
 import moment from 'moment';
-import {getListSV} from '../../../Stores/list_sv/slice';
+import {getListSV,updateUsage} from '../../../Stores/list_sv/slice';
 import {getAllModel,putModel,postModel} from '../../../Stores/model_run/slice';
 import {useSelector,useDispatch} from 'react-redux';
 
@@ -12,10 +12,17 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
     const fetchListSV = () => dispatch(getListSV()); 
     const addNewModel = (model) => dispatch(postModel(model));
     const editModel = (model) => dispatch(putModel(model));
+    const editUsage = (usage) => dispatch(updateUsage(usage))
     const listSV = useSelector(state => state.listSV.data);
     const models = useSelector(state => state.model.data);
     const [select,setSelect] = useState({status:"",server:""});
     const [time,setTime] = useState({start:"",end:""});
+
+    const checkMemory = ()=>{
+        const sv_memory = select.server === "" ? listSV.find((i)=> i.name === fillData.Server_Run):
+        listSV.find((i)=> i.name === select.server);
+        return sv_memory;
+    }
 
     const onCheck = (name,memory,ip_server,main,backup) =>{
         if(name === ""){
@@ -35,6 +42,10 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
         } else {
             if(isNaN(memory)){
                 message.error("Type of memory is number!",5);
+                return false;
+            } else if(checkMemory().GB < checkMemory().U_GB + Number(memory)){
+                message.error(`The remaining memory of Server ${
+                    select.server === "" ? fillData.Server_Run: select.server} is not enough!`,5);
                 return false;
             }
         }
@@ -80,9 +91,16 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 number_run:fillData.number_run
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "edit" });
+                if(Number(memory.value) !== fillData.GB_Model){
+                    editUsage({usage: checkMemory().U_GB + Number(memory.value - fillData.GB_Model),
+                        name:select.server === "" ? fillData.Server_Run : select.server}).unwrap().then(()=>{
+                            fetchListSV();
+                        });
+                }
                 setTimeout(() => {
                   message.success({ content: `${originalPromiseResult}`,key:"edit",duration: 5});
                   fetchModel();
+
                   setShowModal(false);
                 }, 1000);
             })
@@ -105,10 +123,13 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 Server_Run: select.server,
                 time_start:time.start === "" ? "00:00:00" : time.start,
                 time_stop: time.end === "" ? "00:00:00" : time.end,
-                time_run: date.toUTCString(),
+                time_run: date.toString(),
                 number_run:0
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "new" });
+                editUsage({usage: checkMemory().U_GB + Number(memory.value),name:select.server}).unwrap().then(()=>{
+                        fetchListSV();
+                    });
                 setTimeout(() => {
                   message.success({ content: `${originalPromiseResult}`,key:"new",duration: 5});
                   fetchModel();
@@ -199,6 +220,15 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                                 defaultValue={showModal.action==="edit" ? fillData.Status : "0"}>
                             <Option value="0" key="0">0</Option>
                             <Option value="1" key="1">1</Option>
+                        </Select>
+                    </div>
+                    <div className="filed device">
+                        <p>Device</p>
+                        <Select onChange={(value)=>handleChange(value,"status")} id="status" 
+                                defaultValue={showModal.action==="edit" ? fillData.Device : "0"}>
+                            <Option value="0" key="0">0</Option>
+                            <Option value="1" key="1">1</Option>
+                            <Option value="1" key="1">2</Option>
                         </Select>
                     </div>
                     <div className="filed start">

@@ -16,6 +16,10 @@ const listSvApi = {
     removeListSV: (params)=>{
         const url = `/api/listServer/${params}`;
         return axiosClient.delete(url);
+    },
+    updateUsage: (data,params)=>{
+        const url = `/api/listServer/usage/${params}`;
+        return axiosClient.post(url,data);
     }
 }
 

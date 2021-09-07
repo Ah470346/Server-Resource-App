@@ -7,7 +7,8 @@ const initialState = {
     postListSV:"",
     putListSV:"",
     removeListSV:"",
-    error:null
+    error:null,
+    updateUsage:"",
 }
 
 export const postListSV = createAsyncThunk(
@@ -66,6 +67,20 @@ export const removeListSV = createAsyncThunk(
     }
 )
 
+export const updateUsage = createAsyncThunk(
+    'status/updateUsage',
+    async (usage, { rejectWithValue }) => { 
+        try {
+            const response = await listSvApi.updateUsage(usage,usage.name);
+            return response;
+        } catch (err) {
+        // Use `err.response.data` as `action.payload` for a `rejected` action,
+        // by explicitly returning it using the `rejectWithValue()` utility
+            return rejectWithValue(err.response.data);
+        }
+    }
+)
+
 const list_svReducer = createReducer(initialState, {
     [postListSV.pending]: (state, action) => {state.loading = true},
     [postListSV.fulfilled]: (state, action) => {
@@ -100,6 +115,15 @@ const list_svReducer = createReducer(initialState, {
         state.removeListSV = action.payload;
     },
     [removeListSV.rejected]: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    },
+    [updateUsage.pending]: (state, action) => {state.loading = true},
+    [updateUsage.fulfilled]: (state, action) => {
+        state.loading = false;
+        state.updateUsage = action.payload;
+    },
+    [updateUsage.rejected]: (state, action) => {
         state.loading = false;
         state.error = action.payload;
     }

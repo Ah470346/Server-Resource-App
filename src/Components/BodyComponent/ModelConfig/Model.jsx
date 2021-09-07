@@ -25,8 +25,9 @@ function Model(props) {
             memory:`${i.GB_Model} GB`,
             ip_server: i.IP_SV,
             main: i.Main_SV,
-            back:i.Backup_SV,
+            backup:i.Backup_SV,
             status:i.Status,
+            device:i.Device,
             start: i.time_start,
             end:i.time_stop,
             action: <div className="action">
@@ -92,6 +93,16 @@ function Model(props) {
             // width:100,
             sorter: {
                 compare: (a, b) => a.status - b.status,
+                multiple: 2,
+            }
+        },
+        {
+            title: 'Device',
+            dataIndex: 'device',
+            key:"device",
+            // width:100,
+            sorter: {
+                compare: (a, b) => a.device - b.device,
                 multiple: 2,
             }
         },
