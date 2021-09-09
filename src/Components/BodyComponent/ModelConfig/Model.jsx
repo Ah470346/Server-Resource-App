@@ -167,8 +167,8 @@ function Model(props) {
                             setShowDelete(false);
                         }, 1000);
                     })
-                } key="1" type="primary" ghost>Có</Button>
-                          <Button key="2" onClick={()=>setShowDelete(false)} type="default" danger>Không</Button>  </>}
+                } key="1" type="primary" ghost>Yes</Button>
+                          <Button key="2" onClick={()=>setShowDelete(false)} type="default" danger>No</Button>  </>}
                 className="model-delete-server"
             >   
 

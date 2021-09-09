@@ -121,7 +121,7 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
                 cancelButtonProps ={{ style:{ display: 'none' }} }
                 okButtonProps ={{ style:{ display: 'none' }} }
                 centered
-                footer={<button onClick={onEdit} className="save">Lưu</button>}
+                footer={<button onClick={onEdit} className="save">Save</button>}
                 width="800px"
                 className="modal-edit-server"
             >

@@ -80,30 +80,30 @@
                         left: 0;
                         transform: translateX(-100%);
                         transition: all 0.2s ease;
-                        background-color: blue;
+                        background-color: #CD845C;
                     }
 
                     input:focus ~ label {
                         top: -10px;
-                        color: blue;
+                        color: #CD845C;
                         font-size: 1em;
                         font-weight: 600;
                     }
                     input:valid ~ label {
                         top: -10px;
-                        color: blue;
+                        color: #CD845C;
                         font-size: 1em;
                         font-weight: 600;
                     }
                     input:focus ~ label svg {
                         width: 22px;
                         height: 22px;
-                        stroke: blue;
+                        stroke: #CD845C;
                     }
                     input:valid ~ label svg {
                         width: 22px;
                         height: 22px;
-                        stroke: blue;
+                        stroke: #CD845C;
                     }
                     input:focus ~ span {
                         transform: translateX(0);

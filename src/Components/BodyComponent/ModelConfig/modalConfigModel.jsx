@@ -19,8 +19,10 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
     const [time,setTime] = useState({start:"",end:""});
 
     const checkMemory = ()=>{
-        const sv_memory = select.server === "" ? listSV.find((i)=> i.name === fillData.Server_Run):
+        console.log(select.server);
+        const sv_memory = select.server === "" ? listSV.find((i)=> {console.log(i.name,fillData.Server_Run);return i.name === fillData.Server_Run}):
         listSV.find((i)=> i.name === select.server);
+        console.log(sv_memory);
         return sv_memory;
     }
 
@@ -34,19 +36,6 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                     message.error("Config server name is exist!",5);
                     return false;
                 }
-            }
-        }
-        if(memory === ""){
-            message.error("Memory is empty!",5);
-            return false;
-        } else {
-            if(isNaN(memory)){
-                message.error("Type of memory is number!",5);
-                return false;
-            } else if(checkMemory().GB < checkMemory().U_GB + Number(memory)){
-                message.error(`The remaining memory of Server ${
-                    select.server === "" ? fillData.Server_Run: select.server} is not enough!`,5);
-                return false;
             }
         }
         if(ip_server === ""){
@@ -64,6 +53,19 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
         if(select.server === "" && showModal.action === "new"){
             message.error("Server Run don't choice!",5);
             return false;
+        }
+        if(memory === ""){
+            message.error("Memory is empty!",5);
+            return false;
+        } else {
+            if(isNaN(memory)){
+                message.error("Type of memory is number!",5);
+                return false;
+            } else if(checkMemory().GB < checkMemory().U_GB + Number(memory)){
+                message.error(`The remaining memory of Server ${
+                    select.server === "" ? fillData.Server_Run: select.server} is not enough!`,5);
+                return false;
+            }
         }
         return true;
     }
@@ -174,9 +176,10 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
             cancelButtonProps ={{ style:{ display: 'none' }} }
             okButtonProps ={{ style:{ display: 'none' }} }
             centered
-            footer={<button onClick={onEdit} className="save">Lưu</button>}
+            footer={<button onClick={onEdit} className="save">Save</button>}
             width="800px"
             className="modal-edit-server model"
+            key={showModal.action}
         >
             <div className="wrap-modal-content" key={fillData.name}>
                 <div className="left">  
@@ -206,7 +209,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                     <div className="filed server">
                             <p>Server Run *</p>
                             <Select onChange={(value)=>handleChange(value,"server")} id="server" 
-                                    defaultValue={showModal.action==="edit" ? fillData.Server_Run : "Choice server"}>
+                                    defaultValue={showModal.action==="edit" ? fillData.Server_Run : "Select a server"}>
                                { listSV.map((i,index)=>{
                                     return(
                                         <Option value={i.name} key={index}>{i.name}</Option>

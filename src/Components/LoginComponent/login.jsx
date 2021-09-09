@@ -13,21 +13,34 @@ function Login(props) {
         e.preventDefault();
         const username = document.getElementById("username");
         const password = document.getElementById("password");
+        const button = document.getElementById("submit");
         onLogin({username:username.value,password:password.value})
         .unwrap()
         .then(async (originalPromiseResult) => {
             message.loading({ content: 'Loading...', key:"login" });
             localStorage.setItem("permission","home");
+            username.style.pointerEvents = "none";
+            password.style.pointerEvents = "none";
+            button.style.pointerEvents = "none";
             setTimeout(() => {
                 message.success({ content: originalPromiseResult,key: "login", duration: 5 });
+                username.style.pointerEvents = "auto";
+                password.style.pointerEvents = "auto";
+                button.style.pointerEvents = "auto";
                 onPermission("home");
             }, 1500);
         })
         .catch((rejectedValueOrSerializedError) => {
             message.loading({ content: 'Loading...', key:"errLogin" });
-            password.value = "";
+            username.style.pointerEvents = "none";
+            password.style.pointerEvents = "none";
+            button.style.pointerEvents = "none";
             setTimeout(() => {
                 message.error({ content: rejectedValueOrSerializedError,key: "errLogin", duration: 5 });
+                password.value = "";
+                username.style.pointerEvents = "auto";
+                password.style.pointerEvents = "auto";
+                button.style.pointerEvents = "auto";
             }, 1500);
         })
     }
@@ -40,10 +53,14 @@ function Login(props) {
                             <img src={VBPO} alt="" />
                         </div>
                         <div className="sign-in">
-                            <p>SING IN</p>
+                            <p>SIGN IN</p>
                         </div>
                         <div className="input username">
-                            <input type="text" name="username" id="username" required/>
+                            <input 
+                                title="Please fill out this field"
+                                onInvalid={(e)=> {e.target.setCustomValidity("Please fill out this field")}} 
+                                onInput={(e)=> {e.target.setCustomValidity('')}}
+                                type="text" name="username" id="username" required/>
                             <label htmlFor="username">
                                 <p>USERNAME</p>
                                 <svg xmlns="http://www.w3.org/2000/svg"   
@@ -58,7 +75,11 @@ function Login(props) {
                             <span></span>
                         </div>
                         <div className="input password">
-                            <input type="password" name="password" id="password" required/>
+                            <input 
+                                title="Please fill out this field"
+                                onInvalid={(e)=> {e.target.setCustomValidity("Please fill out this field")}} 
+                                onInput={(e)=> {e.target.setCustomValidity('')}}
+                                type="password" name="password" id="password" required/>
                             <label htmlFor="password">
                                 <p>PASSWORD</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" 
@@ -73,7 +94,7 @@ function Login(props) {
                             <span></span>    
                         </div>
                         <div className="btn-login">
-                            <button type="submit">SIGN IN</button>
+                            <button id="submit" type="submit">SIGN IN</button>
                         </div>
                     </form>
                 </Col>
