@@ -17,12 +17,11 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
     const models = useSelector(state => state.model.data);
     const [select,setSelect] = useState({status:"",server:""});
     const [time,setTime] = useState({start:"",end:""});
+    const [emptyAdd,setEmptyAdd] = useState(false);
 
     const checkMemory = ()=>{
-        console.log(select.server);
-        const sv_memory = select.server === "" ? listSV.find((i)=> {console.log(i.name,fillData.Server_Run);return i.name === fillData.Server_Run}):
+        const sv_memory = select.server === "" ? listSV.find((i)=> {return i.name === fillData.Server_Run}):
         listSV.find((i)=> i.name === select.server);
-        console.log(sv_memory);
         return sv_memory;
     }
 
@@ -37,10 +36,6 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                     return false;
                 }
             }
-        }
-        if(ip_server === ""){
-            message.error("IP Server is empty!",5);
-            return false;
         }
         if(main === ""){
             message.error("Main Server is empty!",5);
@@ -61,9 +56,11 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
             if(isNaN(memory)){
                 message.error("Type of memory is number!",5);
                 return false;
-            } else if(checkMemory().GB < checkMemory().U_GB + Number(memory)){
-                message.error(`The remaining memory of Server ${
-                    select.server === "" ? fillData.Server_Run: select.server} is not enough!`,5);
+            } else if(showModal.action === "new" && checkMemory().GB < checkMemory().U_GB + Number(memory)){
+                message.error(`The remaining memory capacity of main server is not enough`,5);
+                return false;
+            } else if(showModal.action === "edit" && checkMemory().GB < checkMemory().U_GB + (Number(memory) - fillData.GB_Model)){
+                message.error(`The remaining memory capacity of main server is not enough`,5);
                 return false;
             }
         }
@@ -94,8 +91,21 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "edit" });
                 if(Number(memory.value) !== fillData.GB_Model){
+                    // change memory usage of server when memory of model change
                     editUsage({usage: checkMemory().U_GB + Number(memory.value - fillData.GB_Model),
                         name:select.server === "" ? fillData.Server_Run : select.server}).unwrap().then(()=>{
+                            fetchListSV();
+                        });
+                }
+                if(select.server !== ""){
+                    // convert memory from old server to new server
+                    editUsage({usage: checkMemory().U_GB + Number(memory.value),
+                        name:select.server}).unwrap().then(()=>{
+                            fetchListSV();
+                        });
+                    // delete memory of old server when convert    
+                    editUsage({usage: listSV.find((i)=> {return i.name === fillData.Server_Run}).U_GB - fillData.GB_Model,
+                        name:fillData.Server_Run}).unwrap().then(()=>{
                             fetchListSV();
                         });
                 }
@@ -136,6 +146,9 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                   message.success({ content: `${originalPromiseResult}`,key:"new",duration: 5});
                   fetchModel();
                   setShowModal(false);
+                  setEmptyAdd(!emptyAdd);
+                  setSelect({status:"",server:""});
+                  setTime({start:"",end:""});
                 }, 1000);
             })
             .catch((rejectedValueOrSerializedError) => {
@@ -179,9 +192,9 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
             footer={<button onClick={onEdit} className="save">Save</button>}
             width="800px"
             className="modal-edit-server model"
-            key={showModal.action}
+            key={emptyAdd}
         >
-            <div className="wrap-modal-content" key={fillData.name}>
+            <div className="wrap-modal-content" >
                 <div className="left">  
                     <div className="filed server">
                         <p>Name Model Config *</p>

@@ -3,6 +3,7 @@ import {ReactComponent as Plus} from '../../../Assets/plus.svg';
 import {ReactComponent as Trash} from '../../../Assets/trash.svg';
 import {ReactComponent as Edit} from '../../../Assets/edit.svg';
 import {Table,Modal,Button,message} from 'antd';
+import {getListSV,updateUsage} from '../../../Stores/list_sv/slice';
 import {getAllModel,removeModel} from '../../../Stores/model_run/slice';
 import {useSelector,useDispatch} from 'react-redux';
 import ModalConfigModel from './modalConfigModel';
@@ -11,11 +12,18 @@ function Model(props) {
     const dispatch = useDispatch();
     const fetchModel = () => dispatch(getAllModel());
     const DeleteModel = (params) => dispatch(removeModel(params));
+    const editUsage = (usage) => dispatch(updateUsage(usage))
+    const fetchListSV = () => dispatch(getListSV()); 
     const [showModal,setShowModal] = useState({action:"",show:false});
     const [fillData,setFillData] = useState("");
     const [showDelete,setShowDelete] = useState(false);
-    const [remove,setRemove] = useState("");
+    const [remove,setRemove] = useState({name:"",GB: null,server:""});
     const models = useSelector(state => state.model.data);
+    const listSV = useSelector(state => state.listSV.data);
+    const checkMemory = ()=>{
+        const sv_memory = listSV.find((i)=> {return i.name === remove.server})
+        return sv_memory;
+    } 
     const data = models !== "" && models.map((i,index)=>{
         return{
             key: index + 1,
@@ -32,7 +40,7 @@ function Model(props) {
             end:i.time_stop,
             action: <div className="action">
                 <Edit onClick={()=> {setShowModal({action:"edit",show:true});setFillData(i)}}/>
-                <Trash onClick={()=> {setShowDelete(true);setRemove(i.name)}}/>
+                <Trash onClick={()=> {setShowDelete(true);setRemove({name:i.name,GB:i.GB_Model,server: i.Server_Run })}}/>
                 </div>
         }
     })
@@ -128,6 +136,7 @@ function Model(props) {
 
     useEffect(()=>{
         fetchModel();
+        fetchListSV();
     },[]);// eslint-disable-line react-hooks/exhaustive-deps
     return (
         <div className="wrap-page-model">
@@ -152,8 +161,12 @@ function Model(props) {
                 okButtonProps ={{ style:{ display: 'none' }} }
                 centered
                 footer={<><Button onClick={()=>
-                    DeleteModel(remove).unwrap().then((originalPromiseResult) => {
+                    DeleteModel(remove.name).unwrap().then((originalPromiseResult) => {
                         message.loading({ content: 'Loading...',key: "delete" });
+                        editUsage({usage: checkMemory().U_GB - Number(remove.GB),
+                            name:remove.server}).unwrap().then(()=>{
+                                fetchListSV();
+                            });
                         setTimeout(() => {
                           message.success({ content: `${originalPromiseResult}`,key:"delete",duration: 5});
                           setShowDelete(false);

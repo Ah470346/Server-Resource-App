@@ -11,6 +11,7 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
     const editServer = (server) => dispatch(putListSV(server));
     const listSV = useSelector(state => state.listSV.data);
     const [select,setSelect] = useState({status:"undefined",device:"undefined"});
+    const [emptyAdd,setEmptyAdd] = useState(false);
     const onCheck = (server,memory,path,usage) =>{
         if(server === ""){
             message.error("Config server name is empty!",5);
@@ -90,6 +91,7 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
                   message.success({ content: `${originalPromiseResult}`,key:"new",duration: 5});
                   fetchListSV();
                   setShowModal(false);
+                  setEmptyAdd(!emptyAdd);
                 }, 1000);
             })
             .catch((rejectedValueOrSerializedError) => {
@@ -124,8 +126,9 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
                 footer={<button onClick={onEdit} className="save">Save</button>}
                 width="800px"
                 className="modal-edit-server"
+                key={emptyAdd}
             >
-                <div className="wrap-modal-content" key={fillData.name}>
+                <div className="wrap-modal-content">
                     <div className="left">  
                         <div className="filed server">
                             <p>Name Server Config *</p>

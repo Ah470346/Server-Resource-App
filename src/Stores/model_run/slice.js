@@ -28,7 +28,6 @@ export const putModel = createAsyncThunk(
 'model/putModel',
     async (model, { rejectWithValue }) => { 
         try {
-            console.log(model.name);
             const response = await modelApi.editModel(model,model.name);
             return response;
         } catch (err) {
