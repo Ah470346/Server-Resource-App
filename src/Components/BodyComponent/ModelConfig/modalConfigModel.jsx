@@ -17,7 +17,6 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
     const models = useSelector(state => state.model.data);
     const [select,setSelect] = useState({status:"",server:""});
     const [time,setTime] = useState({start:"",end:""});
-    const [emptyAdd,setEmptyAdd] = useState(false);
 
     const checkMemory = ()=>{
         const sv_memory = select.server === "" ? listSV.find((i)=> {return i.name === fillData.Server_Run}):
@@ -146,7 +145,6 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                   message.success({ content: `${originalPromiseResult}`,key:"new",duration: 5});
                   fetchModel();
                   setShowModal(false);
-                  setEmptyAdd(!emptyAdd);
                   setSelect({status:"",server:""});
                   setTime({start:"",end:""});
                 }, 1000);
@@ -192,9 +190,9 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
             footer={<button onClick={onEdit} className="save">Save</button>}
             width="800px"
             className="modal-edit-server model"
-            key={emptyAdd}
+            key={showModal.show}
         >
-            <div className="wrap-modal-content" >
+            <div key={showModal.show} className="wrap-modal-content" >
                 <div className="left">  
                     <div className="filed server">
                         <p>Name Model Config *</p>
