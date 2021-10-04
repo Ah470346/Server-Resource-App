@@ -24,7 +24,9 @@ function Server(props) {
             memory:`${i.GB} GB`,
             path: i.Path,
             usage:`${i.U_GB} GB`,
-            status:i.Status,
+            status:<div className="status">{i.Status === 1 && <span className="off" style={{width:"12px",height:"12px"}}></span>}
+            {i.Status === 0 && <span className="on" style={{width:"12px",height:"12px"}}></span>}
+            {i.Status === 1 ? <p>OFF</p> : <p>ON</p>}</div>,
             device:i.Device,
             action: <div className="action">
                 <Edit onClick={()=> {setShowModal({action:"edit",show:true});setFillData(i)}}/>

@@ -81,7 +81,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 IP_SV: ip_server.value,
                 Main_SV: main.value,
                 Backup_SV: backup.value,
-                Status:select.status === "" ? parseInt(fillData.Status) : parseInt(select.status),
+                Status:select.status === "" ? parseInt(fillData.Status) : parseInt(select.status === "ON" ? "0" : "1"),
                 Server_Run:select.server === "" ? fillData.Server_Run : select.server,
                 time_start:time.start === "" ? fillData.time_start : time.start,
                 time_stop: time.end === "" ? fillData.time_stop : time.end,
@@ -130,7 +130,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 IP_SV: ip_server.value,
                 Main_SV: main.value,
                 Backup_SV: backup.value,
-                Status:select.status === "" ? 0 : parseInt(select.status),
+                Status:select.status === "" ? 0 : parseInt(select.status === "ON" ? "0" : "1"),
                 Server_Run: select.server,
                 time_start:time.start === "" ? "00:00:00" : time.start,
                 time_stop: time.end === "" ? "00:00:00" : time.end,
@@ -167,6 +167,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
     }
 
     function handleChange(value,field) {
+        console.log(value);
         if(field === "status"){
             setSelect({...select,status:value});
         } else {
@@ -231,14 +232,14 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                     <div className="filed status">
                         <p>Status</p>
                         <Select onChange={(value)=>handleChange(value,"status")} id="status" 
-                                defaultValue={showModal.action==="edit" ? fillData.Status : "0"}>
-                            <Option value="0" key="0">0</Option>
-                            <Option value="1" key="1">1</Option>
+                                defaultValue={showModal.action==="edit" ? (fillData.Status === 1 ? "OFF" : "ON") : "ON"}>
+                            <Option value="ON" key="0">ON</Option>
+                            <Option value="OFF" key="1">OFF</Option>
                         </Select>
                     </div>
                     <div className="filed device">
                         <p>Device</p>
-                        <Select onChange={(value)=>handleChange(value,"status")} id="status" 
+                        <Select onChange={(value)=>handleChange(value,"status")} id="device" 
                                 defaultValue={showModal.action==="edit" ? fillData.Device : "0"}>
                             <Option value="0" key="0">0</Option>
                             <Option value="1" key="1">1</Option>

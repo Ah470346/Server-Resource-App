@@ -40,6 +40,24 @@
         background-color: white;
         border-radius: 15px 15px 15px 15px;
 
+        .status {
+            @include flexBox(row,flex-start,center);
+            p {
+                margin: 0;
+                margin-left: 5px;
+            }
+            .on {
+                display: inline-block;
+                border-radius: 50%;
+                background-color: $backgroundGreen;
+            }
+            .off {
+                display: inline-block;
+                border-radius: 50%;
+                background-color: $backgroundRed;
+            }
+        }
+
         .action {
             @include flexBox(row,center,center);
 

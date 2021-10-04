@@ -34,7 +34,9 @@ function Model(props) {
             ip_server: i.IP_SV,
             main: i.Main_SV,
             backup:i.Backup_SV,
-            status:i.Status,
+            status:<div className="status">{i.Status === 1 && <span className="off" style={{width:"12px",height:"12px"}}></span>}
+            {i.Status === 0 && <span className="on" style={{width:"12px",height:"12px"}}></span>}
+            {i.Status === 1 ? <p>OFF</p> : <p>ON</p>}</div>,
             device:i.Device,
             start: i.time_start,
             end:i.time_stop,

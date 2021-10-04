@@ -27,8 +27,10 @@ function Home({columns,columnsDetail}) {
     const checkStatus = (i)=>{
         const currentDate = new Date();
         const date = new Date(i.time_run);
-        if(i.Status === 1 ||(currentDate-date)/1000 >= 60 && i.number_run >= 3){
+        if(((currentDate-date)/1000 >= 60 && i.number_run >= 3)){
             return "error";
+        } else if(i.Status === 1){
+            return "warning";
         } else if((currentDate-date)/1000 >= 60 && i.number_run <= 2) {
             return "warning";
         } else if((currentDate-date)/1000 < 60){
@@ -68,9 +70,9 @@ function Home({columns,columnsDetail}) {
             device: i.Device,
             file: fileRun.length !==0 
             && status.status !==0 && <div className="file">{fileRun[index].total !==0 && `${fileRun[index].run}/${fileRun[index].total}`}
-                {fileRun[index].status === "error" && <Error style={{with:"18px",height:"18px"}}/>}
-                {fileRun[index].status === "warning" && <Warning style={{with:"18px",height:"18px"}}/>}
-                {fileRun[index].status === "" && fileRun[index].total !==0 && <Success style={{with:"18px",height:"18px"}}/>}</div>
+                {fileRun[index].status === "error" && <Error style={{width:"18px",height:"18px"}}/>}
+                {fileRun[index].status === "warning" && <Warning style={{width:"18px",height:"18px"}}/>}
+                {fileRun[index].status === "" && fileRun[index].total !==0 && <Success style={{width:"18px",height:"18px"}}/>}</div>
         }
     });
     const color = (status)=>{

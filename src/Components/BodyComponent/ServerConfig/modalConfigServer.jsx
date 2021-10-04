@@ -61,7 +61,7 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
                 GB: parseFloat(memory.value),
                 Path: path.value,
                 U_GB: parseFloat(usage.value),
-                Status:select.status === "undefined" ? parseInt(fillData.Status) : parseInt(select.status),
+                Status:select.status === "undefined" ? parseInt(fillData.Status) : parseInt(select.status === "ON" ? "0" : "1"),
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "edit" });
                 setTimeout(() => {
@@ -83,7 +83,7 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
                 GB: parseFloat(memory.value),
                 Path: path.value,
                 U_GB: parseFloat(usage.value),
-                Status:select.status === "undefined" ? 0 : parseInt(select.status),
+                Status:select.status === "undefined" ? 0 : parseInt(select.status === "ON" ? "0" : "1"),
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "new" });
                 setTimeout(() => {
@@ -150,9 +150,9 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
                         <div className="filed status">
                             <p>Status</p>
                             <Select onChange={(value)=>handleChange(value,"status")} id="status" 
-                                    defaultValue={showModal.action==="edit" ? fillData.Status : "0"}>
-                                <Option value="0" key="0">0</Option>
-                                <Option value="1" key="1">1</Option>
+                                    defaultValue={showModal.action==="edit" ? (fillData.Status === 1 ? "OFF" : "ON") : "ON"}>
+                                <Option value="ON" key="0">ON</Option>
+                                <Option value="OFF" key="1">OFF</Option>
                             </Select>
                         </div>
                     
