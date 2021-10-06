@@ -16,12 +16,35 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
             message.error("Config server name is empty!",5);
             return false;
         } else {
-            for(let i of listSV){
-                if(i.name === server && i.name !== fillData.name){
-                    message.error("Config server name is exist!",5);
-                    return false;
+            if(showModal.action === "edit"){
+                for(let i of listSV){
+                    // name of edit exist in listSV and unlike old name
+                    if(i.name === server && i.name !== fillData.name){
+                        if((select.device === "undefined" && i.Device === fillData.Device)||(select.device == i.Device)){
+                            message.error("Config server name is exist!",5);
+                            return false;
+                        } 
+                    } else if(i.name === server && i.name === fillData.name){
+                        if(select.device === "undefined" || select.device == i.Device){
+                            message.error("Config server name is exist!",5);
+                            return false;
+                        }
+                    }
+                }
+            } else if(showModal.action === "new"){
+                for(let i of listSV){
+                    if(i.name === server){
+                        if(select.device === "undefined" && i.Device === 0){
+                            message.error("Config server name is exist!",5);
+                            return false;
+                        }  else if(select.device == i.Device){
+                            message.error("Config server name is exist!",5);
+                            return false;
+                        }
+                    }
                 }
             }
+           
         }
         if(memory === ""){
             message.error("Memory is empty!",5);
@@ -117,7 +140,7 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
         <Modal
                 title={showModal.action ==="edit" ? `Detail Server Config` : "Add New Server Config"} 
                 visible={showModal.show}
-                onCancel={()=>setShowModal({...showModal,show:false})}
+                onCancel={()=>{setSelect({status:"undefined",device:"undefined"});setShowModal({...showModal,show:false})}}
                 cancelButtonProps ={{ style:{ display: 'none' }} }
                 okButtonProps ={{ style:{ display: 'none' }} }
                 centered

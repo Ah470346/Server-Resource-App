@@ -17,11 +17,11 @@ function Model(props) {
     const [showModal,setShowModal] = useState({action:"",show:false});
     const [fillData,setFillData] = useState("");
     const [showDelete,setShowDelete] = useState(false);
-    const [remove,setRemove] = useState({name:"",GB: null,server:""});
+    const [remove,setRemove] = useState({name:"",GB: null,server:"",device:""});
     const models = useSelector(state => state.model.data);
     const listSV = useSelector(state => state.listSV.data);
     const checkMemory = ()=>{
-        const sv_memory = listSV.find((i)=> {return i.name === remove.server})
+        const sv_memory = listSV.find((i)=> {return i.name === remove.server && i.Device == remove.device})
         return sv_memory;
     } 
     const data = models !== "" && models.map((i,index)=>{
@@ -42,7 +42,7 @@ function Model(props) {
             end:i.time_stop,
             action: <div className="action">
                 <Edit onClick={()=> {setShowModal({action:"edit",show:true});setFillData(i)}}/>
-                <Trash onClick={()=> {setShowDelete(true);setRemove({name:i.name,GB:i.GB_Model,server: i.Server_Run })}}/>
+                <Trash onClick={()=> {setShowDelete(true);setRemove({name:i.name,GB:i.GB_Model,server: i.Server_Run ,device: i.Device})}}/>
                 </div>
         }
     })
@@ -166,7 +166,7 @@ function Model(props) {
                     DeleteModel(remove.name).unwrap().then((originalPromiseResult) => {
                         message.loading({ content: 'Loading...',key: "delete" });
                         editUsage({usage: checkMemory().U_GB - Number(remove.GB),
-                            name:remove.server}).unwrap().then(()=>{
+                            name:remove.server,Device:remove.device}).unwrap().then(()=>{
                                 fetchListSV();
                             });
                         setTimeout(() => {

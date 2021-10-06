@@ -15,12 +15,23 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
     const editUsage = (usage) => dispatch(updateUsage(usage))
     const listSV = useSelector(state => state.listSV.data);
     const models = useSelector(state => state.model.data);
-    const [select,setSelect] = useState({status:"",server:""});
+    const [select,setSelect] = useState({status:"",server:"",device:""});
     const [time,setTime] = useState({start:"",end:""});
 
     const checkMemory = ()=>{
-        const sv_memory = select.server === "" ? listSV.find((i)=> {return i.name === fillData.Server_Run}):
-        listSV.find((i)=> i.name === select.server);
+        const sv_memory = select.server === "" ? listSV.find((i)=> {
+            if(select.device === ""){
+                return i.name === fillData.Server_Run && i.Device === fillData.Device;
+            } else {
+                return i.name === fillData.Server_Run && i.Device == select.device;
+            }
+        }): listSV.find((i)=> {
+            if(select.device === ""){
+                return i.name === select.server && i.Device === 0;
+            } else {
+                return i.name === select.server && i.Device == select.device;
+            }
+        });
         return sv_memory;
     }
 
@@ -77,7 +88,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
             editModel({
                 name: name.value,
                 GB_Model:Number(memory.value),
-                Device:0,
+                Device: select.device === "" ? Number(fillData.Device) : Number(select.device),
                 IP_SV: ip_server.value,
                 Main_SV: main.value,
                 Backup_SV: backup.value,
@@ -92,26 +103,25 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 if(Number(memory.value) !== fillData.GB_Model){
                     // change memory usage of server when memory of model change
                     editUsage({usage: checkMemory().U_GB + Number(memory.value - fillData.GB_Model),
-                        name:select.server === "" ? fillData.Server_Run : select.server}).unwrap().then(()=>{
+                        name:select.server === "" ? fillData.Server_Run : select.server,Device: select.device === "" ? fillData.Device : Number(select.device)}).unwrap().then(()=>{
                             fetchListSV();
                         });
                 }
-                if(select.server !== ""){
+                if(select.server !== "" || select.device !== ""){
                     // convert memory from old server to new server
                     editUsage({usage: checkMemory().U_GB + Number(memory.value),
-                        name:select.server}).unwrap().then(()=>{
+                        name:select.server === "" ? fillData.Server_Run : select.server ,Device: select.device === "" ? fillData.Device : Number(select.device)}).unwrap().then(()=>{
                             fetchListSV();
                         });
                     // delete memory of old server when convert    
-                    editUsage({usage: listSV.find((i)=> {return i.name === fillData.Server_Run}).U_GB - fillData.GB_Model,
-                        name:fillData.Server_Run}).unwrap().then(()=>{
+                    editUsage({usage: listSV.find((i)=> {return i.name === fillData.Server_Run && i.Device === fillData.Device}).U_GB - fillData.GB_Model,
+                        name:fillData.Server_Run,Device: fillData.Device}).unwrap().then(()=>{
                             fetchListSV();
                         });
                 }
                 setTimeout(() => {
                   message.success({ content: `${originalPromiseResult}`,key:"edit",duration: 5});
                   fetchModel();
-
                   setShowModal(false);
                 }, 1000);
             })
@@ -138,7 +148,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 number_run:0
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "new" });
-                editUsage({usage: checkMemory().U_GB + Number(memory.value),name:select.server}).unwrap().then(()=>{
+                editUsage({usage: checkMemory().U_GB + Number(memory.value),name:select.server,Device: checkMemory().Device}).unwrap().then(()=>{
                         fetchListSV();
                     });
                 setTimeout(() => {
@@ -167,9 +177,10 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
     }
 
     function handleChange(value,field) {
-        console.log(value);
         if(field === "status"){
             setSelect({...select,status:value});
+        } else if(field === "device"){
+            setSelect({...select,device:value});
         } else {
             setSelect({...select,server:value});
         }
@@ -239,11 +250,10 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                     </div>
                     <div className="filed device">
                         <p>Device</p>
-                        <Select onChange={(value)=>handleChange(value,"status")} id="device" 
+                        <Select onChange={(value)=>handleChange(value,"device")} id="device" 
                                 defaultValue={showModal.action==="edit" ? fillData.Device : "0"}>
                             <Option value="0" key="0">0</Option>
                             <Option value="1" key="1">1</Option>
-                            <Option value="1" key="1">2</Option>
                         </Select>
                     </div>
                     <div className="filed start">

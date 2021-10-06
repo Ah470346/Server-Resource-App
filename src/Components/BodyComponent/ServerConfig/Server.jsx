@@ -24,13 +24,13 @@ function Server(props) {
             memory:`${i.GB} GB`,
             path: i.Path,
             usage:`${i.U_GB} GB`,
-            status:<div className="status">{i.Status === 1 && <span className="off" style={{width:"12px",height:"12px"}}></span>}
+            status:<div className="status">{i.Status !==0 && <span className="off" style={{width:"12px",height:"12px"}}></span>}
             {i.Status === 0 && <span className="on" style={{width:"12px",height:"12px"}}></span>}
-            {i.Status === 1 ? <p>OFF</p> : <p>ON</p>}</div>,
+            {i.Status !== 0 ? <p>OFF</p> : <p>ON</p>}</div>,
             device:i.Device,
             action: <div className="action">
                 <Edit onClick={()=> {setShowModal({action:"edit",show:true});setFillData(i)}}/>
-                <Trash onClick={()=> {setShowDelete(true);setRemove(i.name)}}/>
+                <Trash onClick={()=> {setShowDelete(true);setRemove({name:i.name,Device:i.Device})}}/>
                 </div>
         }
     })

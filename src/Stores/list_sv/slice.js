@@ -30,7 +30,7 @@ export const putListSV = createAsyncThunk(
     async (server, { rejectWithValue }) => { 
         try {
             console.log(server);
-            const response = await listSvApi.editListSV(server,server.name);
+            const response = await listSvApi.editListSV(server,server.name,server.Device);
             return response;
         } catch (err) {
         // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -57,7 +57,7 @@ export const removeListSV = createAsyncThunk(
     'status/removeListSV',
     async (params, { rejectWithValue }) => { 
         try {
-            const response = await listSvApi.removeListSV(params);
+            const response = await listSvApi.removeListSV(params.name,params.Device);
             return response;
         } catch (err) {
         // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -71,7 +71,7 @@ export const updateUsage = createAsyncThunk(
     'status/updateUsage',
     async (usage, { rejectWithValue }) => { 
         try {
-            const response = await listSvApi.updateUsage(usage,usage.name);
+            const response = await listSvApi.updateUsage(usage,usage.name,usage.Device);
             return response;
         } catch (err) {
         // Use `err.response.data` as `action.payload` for a `rejected` action,
