@@ -28,7 +28,7 @@ export const putModel = createAsyncThunk(
 'model/putModel',
     async (model, { rejectWithValue }) => { 
         try {
-            const response = await modelApi.editModel(model,model.name);
+            const response = await modelApi.editModel(model.model,model.oldName);
             return response;
         } catch (err) {
         // Use `err.response.data` as `action.payload` for a `rejected` action,

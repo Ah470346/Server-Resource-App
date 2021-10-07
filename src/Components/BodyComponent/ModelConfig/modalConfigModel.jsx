@@ -85,7 +85,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
         const backup = document.getElementById("backup");
         const check = onCheck(name.value,memory.value,ip_server.value,main.value,backup.value);
         if(check === true && showModal.action ==="edit"){
-            editModel({
+            editModel({model:{
                 name: name.value,
                 GB_Model:Number(memory.value),
                 Device: select.device === "" ? Number(fillData.Device) : Number(select.device),
@@ -98,7 +98,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 time_stop: time.end === "" ? fillData.time_stop : time.end,
                 time_run: fillData.time_run,
                 number_run:fillData.number_run
-            }).unwrap().then((originalPromiseResult) => {
+            },oldName:fillData.name}).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "edit" });
                 if(Number(memory.value) !== fillData.GB_Model){
                     // change memory usage of server when memory of model change

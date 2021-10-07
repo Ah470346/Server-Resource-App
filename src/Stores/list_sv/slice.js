@@ -30,7 +30,7 @@ export const putListSV = createAsyncThunk(
     async (server, { rejectWithValue }) => { 
         try {
             console.log(server);
-            const response = await listSvApi.editListSV(server,server.name,server.Device);
+            const response = await listSvApi.editListSV(server.server,server.oldName,server.oldDevice);
             return response;
         } catch (err) {
         // Use `err.response.data` as `action.payload` for a `rejected` action,

@@ -25,7 +25,7 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
                             return false;
                         } 
                     } else if(i.name === server && i.name === fillData.name){
-                        if(select.device === "undefined" || select.device == i.Device){
+                        if(select.device == i.Device && i.Device !== fillData.Device){
                             message.error("Config server name is exist!",5);
                             return false;
                         }
@@ -78,14 +78,14 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
         const usage = document.getElementById("usage");
         const check = onCheck(server.value,memory.value,path.value,usage.value);
         if(check === true && showModal.action ==="edit"){
-            editServer({
+            editServer({server:{
                 name: server.value,
                 Device:select.device === "undefined" ? parseInt(fillData.Device) : parseInt(select.device),
                 GB: parseFloat(memory.value),
                 Path: path.value,
                 U_GB: parseFloat(usage.value),
                 Status:select.status === "undefined" ? parseInt(fillData.Status) : parseInt(select.status === "ON" ? "0" : "1"),
-            }).unwrap().then((originalPromiseResult) => {
+            },oldName: fillData.name,oldDevice: fillData.Device}).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "edit" });
                 setTimeout(() => {
                   message.success({ content: `${originalPromiseResult}`,key:"edit",duration: 5});
