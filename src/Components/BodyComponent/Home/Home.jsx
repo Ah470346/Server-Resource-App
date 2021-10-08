@@ -37,7 +37,7 @@ function Home({columns,columnsDetail}) {
             return 1 ;
         }
     }
-    const timeRun = (name,model) => {
+    const timeRun = (name,device,model) => {
         const result = {
             name:name,
             total:"",
@@ -46,7 +46,7 @@ function Home({columns,columnsDetail}) {
         }
         
         const filterModels = model.filter((i)=>{
-            return i.Server_Run === name;
+            return i.Server_Run === name && i.Device === device;
         });
         result.total = filterModels.length;
         for(let i of filterModels){
@@ -82,7 +82,7 @@ function Home({columns,columnsDetail}) {
             return "rgba(55,152,65,255)";
         } else return "#faad14";
     }
-    const dataDetail = models.length !== 0 && models.filter((i)=>i.Server_Run === detail).map((i,index)=>{
+    const dataDetail = models.length !== 0 && models.filter((i)=>{return i.Server_Run === detail.name && i.Device === detail.device}).map((i,index)=>{
         return {
             key: index + 1,
             number: index + 1,
@@ -153,7 +153,7 @@ function Home({columns,columnsDetail}) {
             const newArr = [];
             if(listSV !== ""){
                 for(let i of listSV){
-                    newArr.push(timeRun(i.name,model));
+                    newArr.push(timeRun(i.name,i.Device,model));
                 }
                 if(EqualArray(newArr,fileRun) === false){
                     setFileRun([...newArr]);
@@ -165,7 +165,8 @@ function Home({columns,columnsDetail}) {
                     status:checkStatus(i),
                     number_run:i.number_run,
                     time_run:i.time_run,
-                    Server_Run:i.Server_Run
+                    Server_Run:i.Server_Run,
+                    Device:i.Device
                 })
             }
             setModels([...modelArr]);
@@ -184,7 +185,7 @@ function Home({columns,columnsDetail}) {
             <Table className="content-table"
                 onRow={(record, rowIndex) => {
                     return {
-                    onClick: event => { setDetail(record.server);
+                    onClick: event => { setDetail({name:record.server,device:record.device});
                                         setShowDetail(true);}, // click row
                     };
                 }} 
@@ -199,7 +200,7 @@ function Home({columns,columnsDetail}) {
                 ><Power/> {status.status === 1 ? "STOP" : "START"}</button>
             </div>
             <Modal
-                title={`Detail Server ${detail}`} 
+                title={`Detail Server ${detail.name}`} 
                 visible={showDetail}
                 onCancel={()=>setShowDetail(false)}
                 cancelButtonProps ={{ style:{ display: 'none' }} }

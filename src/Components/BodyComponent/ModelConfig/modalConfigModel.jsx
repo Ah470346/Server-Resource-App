@@ -133,6 +133,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
             })
         } else if(check === true && showModal.action ==="new"){
             const date = new Date();
+            const arr = date.toLocaleDateString().split("/");
             addNewModel({
                 name: name.value,
                 GB_Model:Number(memory.value),
@@ -144,7 +145,7 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 Server_Run: select.server,
                 time_start:time.start === "" ? "00:00:00" : time.start,
                 time_stop: time.end === "" ? "00:00:00" : time.end,
-                time_run: date.toString(),
+                time_run: `${arr[2]}-${arr[0]}-${arr[1]} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`,
                 number_run:0
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "new" });
@@ -233,9 +234,9 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                             <p>Server Run *</p>
                             <Select onChange={(value)=>handleChange(value,"server")} id="server" 
                                     defaultValue={showModal.action==="edit" ? fillData.Server_Run : "Select a server"}>
-                               { listSV.map((i,index)=>{
+                               { Array.from(new Set(listSV.map((i)=> i.name))).map((i,index)=>{
                                     return(
-                                        <Option value={i.name} key={index}>{i.name}</Option>
+                                        <Option value={i} key={index}>{i}</Option>
                                     )
                                })}
                             </Select>
