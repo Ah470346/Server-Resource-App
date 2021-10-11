@@ -29,7 +29,6 @@ export const putListSV = createAsyncThunk(
 'status/putListSV',
     async (server, { rejectWithValue }) => { 
         try {
-            console.log(server);
             const response = await listSvApi.editListSV(server.server,server.oldName,server.oldDevice);
             return response;
         } catch (err) {

@@ -37,6 +37,25 @@ function Home({columns,columnsDetail}) {
             return 1 ;
         }
     }
+    const updateNumberRun = (i) => {
+        const currentDate = new Date();
+        const date = new Date(i.time_run);
+        if(((currentDate-date)/1000 >= 300 && i.number_run !== 3)){
+            return true;
+        }
+        return false;
+    }
+    const convertModel = (i) =>{
+        if(i.number_run === 3){
+            for(let j of listSV){
+                if((j.GB - j.U_GB) >= i.GB_Model && i.Server_Run !== j.name && j.Status ===0 
+                || (j.GB - j.U_GB) >= i.GB_Model && i.Server_Run === j.name && j.Device !== i.Device && j.Status === 0){
+                    return {newServer: j.name,newDevice:j.Device,newUsage:j.U_GB};
+                }
+            }
+        }
+        return "";
+    }
     const timeRun = (name,device,model) => {
         const result = {
             name:name,
@@ -160,6 +179,7 @@ function Home({columns,columnsDetail}) {
                 }
             }
             for(let i of model){
+                //format model to detail Server
                 modelArr.push({
                     name:i.name,
                     status:checkStatus(i),
@@ -168,6 +188,17 @@ function Home({columns,columnsDetail}) {
                     Server_Run:i.Server_Run,
                     Device:i.Device
                 })
+                // check update number_run
+                if(updateNumberRun(i)){
+                    socket.emit("updateNumber_Run",i.name);
+                }
+                // check and convert Model
+                if(convertModel(i) !== ""){
+                    const old = listSV.filter((j)=>{return i.Server_Run===j.name&&i.Device === j.Device});
+                    socket.emit("convertModel",{old:{oldServer:i.Server_Run,oldDevice:i.Device,
+                                                oldUsage: old[0].U_GB},
+                                            new:convertModel(i),usage: i.GB_Model,name: i.name});
+                }
             }
             setModels([...modelArr]);
         });

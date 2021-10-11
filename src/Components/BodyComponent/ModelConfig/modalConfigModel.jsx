@@ -145,7 +145,9 @@ function ModalConfigModel({showModal,setShowModal,fillData}) {
                 Server_Run: select.server,
                 time_start:time.start === "" ? "00:00:00" : time.start,
                 time_stop: time.end === "" ? "00:00:00" : time.end,
-                time_run: `${arr[2]}-${arr[0]}-${arr[1]} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`,
+                time_run: `${arr[2]}-${("0"+arr[0]).slice(-2)}-${("0"+arr[1]).slice(-2)} `
+                + `${("0"+date.getHours().toString()).slice(-2)}:${("0"+date.getMinutes().toString()).slice(-2)}`
+                + `:${("0"+date.getSeconds().toString()).slice(-2)}.${("0"+date.getMilliseconds().toString()).slice(-2)}`,
                 number_run:0
             }).unwrap().then((originalPromiseResult) => {
                 message.loading({ content: 'Loading...',key: "new" });

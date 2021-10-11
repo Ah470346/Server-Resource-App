@@ -68,7 +68,8 @@ function ModelConfigServer({showModal,setShowModal,fillData}) {
                 return false;
             }
         }
-        if(usage !== "" && memory !== "" && usage > memory){
+        if(usage !== "" && memory !== "" && Number(usage) > Number(memory)){
+            
             message.error("Usage can't greater than Memory!",5);
             return false;
         }
